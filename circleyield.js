@@ -10,7 +10,7 @@ const hapikey = {
 };
 
 const circleURL = 'https://api.circle.com/v1/yield/products/public';
-const hubspotURL = `https://api.hubapi.com/cms/v3/hubdb/tables/${process.env.yieldTableID}`;
+const hubspotURL = 'https://api.hubapi.com/cms/v3/hubdb/tables/5272649';
 
 const getYieldRates = async () => {
   const res = (await axios.get(circleURL)).data.data;

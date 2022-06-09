@@ -11,7 +11,7 @@ const hsConfig = {
 
 const timestamp = `${Date.now()}`;
 
-const hubspotURL = `https://api.hubapi.com/cms/v3/hubdb/tables/${process.env.usdcTableID}`;
+const hubspotURL = 'https://api.hubapi.com/cms/v3/hubdb/tables/5414018';
 // const cgCoins = ['ethereum', 'solana', 'tron', 'algorand', 'stellar', 'avalanche', 'flow', 'hedera', 'usd coin'];
 const cgCoins = ['usd coin'];
 const circleCoins = {
