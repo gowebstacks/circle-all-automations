@@ -114,14 +114,15 @@ function unescapehtml(htmlStr) {
                 let department = data.departments[i];
                 for (let j = 0; j < department.jobs.length; j++) {
                     let job = department.jobs[j];
-                    if (jobs.hasOwnProperty(job.title)) {
-                        jobs[job.title].push(job.absolute_url);
-                        locs[job.title].push(job.location.name);
+                    const curTitle = job.title.trim();
+                    if (jobs.hasOwnProperty(curTitle)) {
+                        jobs[curTitle].push(job.absolute_url);
+                        locs[curTitle].push(job.location.name);
                     } else {
-                        depts[job.title] = department['name'];
-                        locs[job.title] = [job.location.name];
-                        jobs[job.title] = [job.absolute_url];
-                        boards[job.title] = job.board;
+                        depts[curTitle] = department['name'];
+                        locs[curTitle] = [job.location.name];
+                        jobs[curTitle] = [job.absolute_url];
+                        boards[curTitle] = job.board;
                     }
                 }
             }
