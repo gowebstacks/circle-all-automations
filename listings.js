@@ -114,7 +114,7 @@ function unescapehtml(htmlStr) {
                 let department = data.departments[i];
                 for (let j = 0; j < department.jobs.length; j++) {
                     let job = department.jobs[j];
-                    const curTitle = job.title.trim();
+                    const curTitle = job.title.replace(/\s+/g, ' ').trim();
                     if (jobs.hasOwnProperty(curTitle)) {
                         jobs[curTitle].push(job.absolute_url);
                         locs[curTitle].push(job.location.name);
@@ -167,6 +167,7 @@ function unescapehtml(htmlStr) {
                     },
                     "name": title
                 }
+
                 try {
                     const resp = await axios.post('https://api.hubapi.com/cms/v3/hubdb/tables/4555547/rows', body, {
                         params: {
