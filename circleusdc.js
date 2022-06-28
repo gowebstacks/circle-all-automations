@@ -45,7 +45,15 @@ const formatNumber = (number) => {
 }
 
 const getCircleData = async () => {
-  const res = (await axios.get('https://api.circle.com/v1/stablecoins')).data.data[0];
+  const data = (await axios.get('https://api.circle.com/v1/stablecoins')).data.data;
+  let usdcIndex = 0;
+  for (let i = 0; i < data.length; i++) {
+    if (data[i]['symbol'] === 'USDC') {
+      usdcIndex = i;
+    }
+  }
+  const res = data[usdcIndex];
+
   return res.chains.reduce((ret, chain) => {
     if (circleCoins[chain.chain]) {
       ret[circleCoins[chain.chain]] = {
@@ -56,7 +64,7 @@ const getCircleData = async () => {
       }
     }
     return ret;
-  }, { 'usd coin': { values: { update_date: timestamp, total_supply: `$${formatNumber(res.totalAmount)}` } }});
+  }, { 'usd coin': { values: { update_date: timestamp, total_supply: `$${formatNumber(res.totalAmount)}` } } });
 }
 
 const getAllMarketCharts = async () => {
