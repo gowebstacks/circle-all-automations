@@ -4,10 +4,11 @@ const qs = require('qs');
 
 dotenv.config();
 
-const hapikey = process.env.hapikey;
+const accessToken = process.env.accessToken;
 const clientID = process.env.clientID;
 const clientSecret = process.env.clientSecret;
 const pool = process.env.pool;
+
 
 (async () => {
     // retrieve hubspot tickets + associated contacts
@@ -55,8 +56,10 @@ const pool = process.env.pool;
         while (true) {
             let config = {
                 method: 'get',
-                url: `https://api.hubapi.com/crm/v3/objects/tickets?hapikey=${hapikey}&properties=${ticketParams}&associations=contact&associations=contact&limit=100`,
-                headers: {}
+                url: `https://api.hubapi.com/crm/v3/objects/tickets?properties=${ticketParams}&associations=contact&associations=contact&limit=100`,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                }
             };
             if (pagination) {
                 config.url += '&after=' + pagination;
@@ -100,8 +103,10 @@ const pool = process.env.pool;
 
             let config = {
                 method: 'get',
-                url: `https://api.hubapi.com/crm/v3/objects/contacts/${contactID}?hapikey=${hapikey}&properties=${contactParams}`,
-                headers: {}
+                url: `https://api.hubapi.com/crm/v3/objects/contacts/${contactID}?properties=${contactParams}`,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                }
             };
 
             const response = await axios(config);
@@ -131,8 +136,10 @@ const pool = process.env.pool;
             const ownerID = fullContacts[i]['extRef'];
             let config = {
                 method: 'get',
-                url: `https://api.hubapi.com/crm/v3/owners/${ownerID}?hapikey=${hapikey}&idProperty=id`,
-                headers: {}
+                url: `https://api.hubapi.com/crm/v3/owners/${ownerID}?idProperty=id`,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                }
             };
 
             const response = (await axios(config)).data;
@@ -220,7 +227,9 @@ const pool = process.env.pool;
             };
 
             await axios(config)
-                .then(function () { })
+                .then(function () {
+                    console.log('successful contact created');
+                })
                 .catch(function (error) {
                     console.log(error);
                 });

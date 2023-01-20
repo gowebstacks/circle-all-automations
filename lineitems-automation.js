@@ -5,7 +5,7 @@ dotenv.config();
 
 // hubspot api key
 // hidden as an environment variable in production
-let apiKey = process.env.hapikey;
+const accessToken = process.env.accessToken;
 // props required for the calculation
 // props used in formula (including result prop)
 let required_props = ['expected_monthly_transactions', 'fixed_fee', 'expected_monthly_volume', 'interest_rate', 'price', 'projected_revenue'];
@@ -23,9 +23,11 @@ const run = async () => {
       params: {
         properties: required_props.join(),
         archived: 'false',
-        hapikey: apiKey
       },
-      headers: { accept: 'application/json' }
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        accept: 'application/json'
+      }
     };
     // update request if this is recursive pagination
     if (pagination) {
@@ -52,8 +54,7 @@ const run = async () => {
         let patchOptions = {
           method: 'PATCH',
           url: 'https://api.hubapi.com/crm/v3/objects/line_items/' + props['hs_object_id'],
-          params: { hapikey: apiKey },
-          headers: { accept: 'application/json', 'content-type': 'application/json' },
+          headers: { accept: 'application/json', 'content-type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
           data: { properties: { projected_revenue: props[evauluated_prop] } }
         };
         const postresp = await axios(patchOptions);
