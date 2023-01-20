@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // hubspot api key
-const apiKey = process.env.hapikey;
+const accessToken = process.env.accessToken;
 
 function unescapehtml(htmlStr) {
     htmlStr = htmlStr.replace(/&lt;/g, "<");
@@ -22,8 +22,8 @@ function unescapehtml(htmlStr) {
             console.log('init');
             var self = this;
             await axios.get('https://api.hubapi.com/cms/v3/hubdb/tables/4555547/rows', {
-                params: {
-                    hapikey: apiKey
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
                 }
             }).then(async function (data) {
                 await self.clear(data.data);
@@ -42,8 +42,8 @@ function unescapehtml(htmlStr) {
             }
 
             await axios.post('https://api.hubapi.com/cms/v3/hubdb/tables/4555547/rows/draft/batch/purge', ids, {
-                params: {
-                    hapikey: apiKey
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
                 },
                 responseType: "application/json",
             }).then(async function (data) {
@@ -170,8 +170,8 @@ function unescapehtml(htmlStr) {
 
                 try {
                     const resp = await axios.post('https://api.hubapi.com/cms/v3/hubdb/tables/4555547/rows', body, {
-                        params: {
-                            hapikey: apiKey
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
                         },
                         responseType: "application/json"
                     });
@@ -188,8 +188,8 @@ function unescapehtml(htmlStr) {
             console.log('publish');
             var self = this;
             await axios.post('https://api.hubapi.com/cms/v3/hubdb/tables/4555547/draft/push-live', {}, {
-                params: {
-                    hapikey: apiKey
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
                 }
             }).then(async function (data) {
                 console.log('complete');
