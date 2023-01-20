@@ -3,9 +3,11 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const hapikey = {
-  params: {
-    hapikey: process.env.hapikey
+const access = process.env.accessToken;
+
+const accessToken = {
+  headers: {
+    'Authorization': `Bearer ${access}`,
   }
 };
 
@@ -25,18 +27,18 @@ const getYieldRates = async () => {
     ret[`date_${count}`] = `${Date.parse(item.effectiveDate)}`;
     count++;
   });
-  
+
   return { values: ret }; // format return value for hubspot API
 };
 
 const postYieldRates = async (data) => {
-  const row = (await axios.get(`${hubspotURL}/rows`, hapikey)).data.results[0]; // there is exactly one row that needs to be updated
+  const row = (await axios.get(`${hubspotURL}/rows`, accessToken)).data.results[0]; // there is exactly one row that needs to be updated
 
-  (await axios.patch(`${hubspotURL}/rows/${row.id}/draft`, data, hapikey, { responseType: "application/json" })
+  (await axios.patch(`${hubspotURL}/rows/${row.id}/draft`, data, accessToken, { responseType: "application/json" })
     .then((res) => console.log('DRAFT RESPONSE\n', res.data, '\n'))
     .catch((error) => console.log('DRAFT ERROR\n', error, '\n')));
 
-  (await axios.post(`${hubspotURL}/draft/publish`, {}, hapikey)
+  (await axios.post(`${hubspotURL}/draft/publish`, {}, accessToken)
     .then((res) => console.log('PUBLISH RESPONSE\n', res.data, '\n'))
     .catch((error) => console.log('PUBLISH ERROR\n', error, '\n')));
 };
