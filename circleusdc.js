@@ -2,9 +2,11 @@ const axios = require("axios");
 const dotenv = require("dotenv");
 dotenv.config();
 
+const accessToken = process.env.accessToken;
+
 const hsConfig = {
-  params: {
-    hapikey: process.env.hapikey
+  headers: {
+    'Authorization': `Bearer ${accessToken}`,
   }
 };
 
